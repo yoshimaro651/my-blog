@@ -6,12 +6,12 @@ export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
 		params: { slug: post.id },
-		props: { post },
+		props: { entry: post },
 	}));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
 
 <!doctype html>
@@ -19,7 +19,7 @@ const { Content } = await post.render();
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<title>{post.data.title}</title>
+		<title>{entry.data.title}</title>
 		<style>
 			* {
 				margin: 0;
@@ -83,9 +83,9 @@ const { Content } = await post.render();
 	</head>
 	<body>
 		<main>
-			<h1>{post.data.title}</h1>
+			<h1>{entry.data.title}</h1>
 			<p style="color: #666; margin-bottom: 2rem;">
-				<FormattedDate date={post.data.pubDate} />
+				<FormattedDate date={entry.data.pubDate} />
 			</p>
 			<article>
 				<Content />
