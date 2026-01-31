@@ -1,26 +1,49 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
 
-// 静的ページ生成
+// ① すべての記事を取得
+const posts = await getCollection('blog');
+
+// ② URL の slug と一致する記事を探す
+const post = posts.find((p) => p.slug === Astro.params.slug);
+
+if (!post) {
+  throw new Error(`Post not found: ${Astro.params.slug}`);
+}
+
+// ③ Markdown を HTML に変換
+const { Content } = await post.render();
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{post.data.title}</title>
+  </head>
+  <body>
+    <main style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
+      <h1>{post.data.title}</h1>
+      <p>
+        <FormattedDate date={post.data.pubDate} />
+      </p>
+
+      <article>
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>
+
+<!-- ④ getStaticPaths を定義（これが必須） -->
+---
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
 
   return posts.map((post) => ({
-    params: { slug: post.slug }, // ←ここ重要
-    props: { post },
+    params: { slug: post.slug },
   }));
 }
-
-// 型定義
-type Props = {
-  post: CollectionEntry<'blog'>;
-};
-
-const { post } = Astro.props;
-const { Content } = await render(post);
 ---
-
-<BlogPost {...post.data}>
-  <Content />
-</BlogPost>ß
