@@ -21,72 +21,228 @@ const { Content } = await entry.render();
 		<meta name="viewport" content="width=device-width" />
 		<title>{entry.data.title}</title>
 		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-			
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-				line-height: 1.8;
-				color: #333;
-				background: #f5f5f5;
-			}
-			
-			main {
-				max-width: 800px;
-				margin: 2rem auto;
-				padding: 2rem;
-				background: white;
-				border-radius: 8px;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-			}
-			
-			h1 {
-				font-size: 2rem;
-				margin-bottom: 1rem;
-				color: #1a202c;
-			}
-			
-			article {
-				margin-top: 2rem;
-			}
-			
-			article :global(h2) {
-				margin-top: 2rem;
-				margin-bottom: 1rem;
-				font-size: 1.5rem;
-			}
-			
-			article :global(p) {
-				margin-bottom: 1rem;
-			}
-			
-			article :global(code) {
-				background: #f4f4f4;
-				padding: 0.2rem 0.4rem;
-				border-radius: 3px;
-			}
-			
-			.back-link {
-				margin-top: 2rem;
-				display: inline-block;
-				color: #667eea;
-				text-decoration: none;
-			}
-			
-			.back-link:hover {
-				text-decoration: underline;
-			}
-		</style>
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		line-height: 1.8;
+		color: #333;
+		background: #f5f5f5;
+	}
+	
+	main {
+		max-width: 800px;
+		margin: 2rem auto;
+		padding: 2rem;
+		background: white;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	}
+	
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+		color: #1a202c;
+		line-height: 1.3;
+		border-bottom: 3px solid #667eea;
+		padding-bottom: 0.5rem;
+	}
+	
+	/* 日付のスタイル */
+	.post-meta {
+		color: #666;
+		margin-bottom: 2rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #eee;
+		font-size: 0.95rem;
+	}
+	
+	article {
+		margin-top: 2rem;
+		font-size: 1.05rem;
+		line-height: 1.9;
+	}
+	
+	/* 見出し */
+	article :global(h2) {
+		margin-top: 3rem;
+		margin-bottom: 1.5rem;
+		font-size: 1.75rem;
+		color: #2d3748;
+		padding-left: 1rem;
+		border-left: 4px solid #667eea;
+	}
+	
+	article :global(h3) {
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+		font-size: 1.4rem;
+		color: #4a5568;
+	}
+	
+	article :global(h4) {
+		margin-top: 1.5rem;
+		margin-bottom: 0.75rem;
+		font-size: 1.2rem;
+		color: #4a5568;
+	}
+	
+	/* 段落 */
+	article :global(p) {
+		margin-bottom: 1.5rem;
+		line-height: 1.9;
+	}
+	
+	/* リスト */
+	article :global(ul),
+	article :global(ol) {
+		margin-bottom: 1.5rem;
+		padding-left: 2rem;
+	}
+	
+	article :global(li) {
+		margin-bottom: 0.5rem;
+		line-height: 1.8;
+	}
+	
+	/* リンク */
+	article :global(a) {
+		color: #667eea;
+		text-decoration: none;
+		border-bottom: 1px solid #667eea;
+		transition: all 0.3s ease;
+	}
+	
+	article :global(a:hover) {
+		color: #764ba2;
+		border-bottom-color: #764ba2;
+	}
+	
+	/* コードブロック */
+	article :global(code) {
+		background: #f7fafc;
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		font-size: 0.9em;
+		color: #e53e3e;
+		border: 1px solid #e2e8f0;
+		font-family: 'Courier New', monospace;
+	}
+	
+	article :global(pre) {
+		background: #2d3748;
+		color: #e2e8f0;
+		padding: 1.5rem;
+		border-radius: 8px;
+		overflow-x: auto;
+		margin-bottom: 1.5rem;
+		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+	}
+	
+	article :global(pre code) {
+		background: transparent;
+		border: none;
+		color: inherit;
+		padding: 0;
+	}
+	
+	/* 引用 */
+	article :global(blockquote) {
+		border-left: 4px solid #667eea;
+		padding-left: 1.5rem;
+		margin: 2rem 0;
+		font-style: italic;
+		color: #4a5568;
+		background: #f7fafc;
+		padding: 1rem 1.5rem;
+		border-radius: 4px;
+	}
+	
+	/* 画像 */
+	article :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 8px;
+		margin: 2rem 0;
+		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+	}
+	
+	/* 水平線 */
+	article :global(hr) {
+		border: none;
+		border-top: 2px solid #e2e8f0;
+		margin: 3rem 0;
+	}
+	
+	/* テーブル */
+	article :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 2rem 0;
+	}
+	
+	article :global(th),
+	article :global(td) {
+		padding: 0.75rem;
+		border: 1px solid #e2e8f0;
+		text-align: left;
+	}
+	
+	article :global(th) {
+		background: #f7fafc;
+		font-weight: 600;
+	}
+	
+	/* 戻るリンク */
+	.back-link {
+		margin-top: 3rem;
+		display: inline-block;
+		color: #667eea;
+		text-decoration: none;
+		font-weight: 600;
+		padding: 0.75rem 1.5rem;
+		border: 2px solid #667eea;
+		border-radius: 6px;
+		transition: all 0.3s ease;
+	}
+	
+	.back-link:hover {
+		background: #667eea;
+		color: white;
+		transform: translateX(-4px);
+	}
+	
+	/* レスポンシブ */
+	@media (max-width: 768px) {
+		h1 {
+			font-size: 2rem;
+		}
+		
+		main {
+			padding: 1.5rem;
+			margin: 1rem;
+		}
+		
+		article {
+			font-size: 1rem;
+		}
+		
+		article :global(h2) {
+			font-size: 1.5rem;
+		}
+	}
+</style>
 	</head>
 	<body>
 		<main>
 			<h1>{entry.data.title}</h1>
-			<p style="color: #666; margin-bottom: 2rem;">
-				<FormattedDate date={entry.data.pubDate} />
-			</p>
+			<p class="post-meta">
+	<FormattedDate date={entry.data.pubDate} />
+</p>
 			<article>
 				<Content />
 			</article>
