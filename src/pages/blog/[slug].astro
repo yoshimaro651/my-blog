@@ -2,17 +2,17 @@
 import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 
-// ① すべての記事を取得
+// すべての記事を取得
 const posts = await getCollection('blog');
 
-// ② URL の slug と一致する記事を探す
+// URL の slug と一致する記事を探す
 const post = posts.find((p) => p.slug === Astro.params.slug);
 
 if (!post) {
   throw new Error(`Post not found: ${Astro.params.slug}`);
 }
 
-// ③ Markdown を HTML に変換
+// Markdown を HTML に変換
 const { Content } = await post.render();
 ---
 
@@ -37,8 +37,8 @@ const { Content } = await post.render();
   </body>
 </html>
 
-<!-- ④ getStaticPaths を定義（これが必須） -->
 ---
+
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
 
