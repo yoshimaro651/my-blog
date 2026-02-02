@@ -59,6 +59,14 @@ const posts = (await getCollection('blog')).sort(
         position: relative;
         z-index: 1;
       }
+
+      .header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  text-align: center;  /* ← ここに追加 */
+}
       
       .site-title {
         font-size: 3rem;
@@ -115,6 +123,12 @@ const posts = (await getCollection('blog')).sort(
       .section-header {
         margin-bottom: 2.5rem;
       }
+
+      /* セクションヘッダー */
+.section-header {
+  margin-bottom: 2.5rem;
+  text-align: center;  /* ← ここに追加 */
+}
       
       .section-title {
         font-size: 2rem;
