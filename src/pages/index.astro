@@ -286,6 +286,39 @@ const posts = (await getCollection('blog')).sort(
           flex-wrap: wrap;
         }
       }
+
+      /* カテゴリーの色分け */
+.post-category {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+/* カテゴリごとの色 */
+.post-category[data-category="Tech"] {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.post-category[data-category="Business"] {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.post-category[data-category="Tutorial"] {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.post-category[data-category="News"] {
+  background: #fee2e2;
+  color: #991b1b;
+}
     </style>
   </head>
   <body>
@@ -307,7 +340,7 @@ const posts = (await getCollection('blog')).sort(
           <li class="post-card">
             <a href={`/blog/${post.id.replace('.md', '')}/`}>
               <div class="post-content">
-                <span class="post-category">Tech</span>
+                <span class="post-category">{post.data.category}</span>
                 <div class="post-date">
                   <FormattedDate date={post.data.pubDate} />
                 </div>
