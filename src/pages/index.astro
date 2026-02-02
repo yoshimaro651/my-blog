@@ -97,6 +97,14 @@ const posts = (await getCollection('blog')).sort(
         display: flex;
         gap: 2rem;
       }
+
+      .nav-content {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto; /* ← これが重要 */
+}
       
       .nav-link {
         color: #1a1a1a;
