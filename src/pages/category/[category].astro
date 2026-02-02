@@ -1,10 +1,23 @@
 ---
 import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const categories = [...new Set(allPosts.map(post => post.data.category))];
+  
+  return categories.map(category => ({
+    params: { category: category.toLowerCase() },
+    props: { 
+      category,
+      posts: allPosts
+        .filter(post => post.data.category === category)
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    },
+  }));
+}
+
+const { category, posts } = Astro.props;
 ---
 
 <!doctype html>
@@ -12,8 +25,8 @@ const posts = (await getCollection('blog')).sort(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>IT活用のススメ - 思考と仕事をITで時短していく</title>
-    <meta name="description" content="最新のIT技術、IT時事問題、ITの活用方法を紹介" />
+    <title>{category} - IT活用のススメ</title>
+    <meta name="description" content={`${category}カテゴリの記事一覧`} />
     
     <!-- ファビコン -->
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -37,57 +50,36 @@ const posts = (await getCollection('blog')).sort(
       header {
         background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
         color: white;
-        padding: 4rem 2rem;
-        position: relative;
-        overflow: hidden;
+        padding: 3rem 2rem;
+        text-align: center;
       }
       
-      header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="white" opacity="0.1"/></svg>');
-        opacity: 0.1;
-      }
-      
-      .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-      }
-
-      .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  text-align: center;  /* ← ここに追加 */
-}
-      
-      .site-title {
-        font-size: 3rem;
-        font-weight: 800;
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
         margin-bottom: 0.5rem;
-        letter-spacing: -0.02em;
       }
       
-      .site-description {
-        font-size: 1.25rem;
-        opacity: 0.95;
-        font-weight: 300;
+      .breadcrumb {
+        margin-top: 1rem;
+        opacity: 0.9;
+      }
+      
+      .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+      }
+      
+      .breadcrumb a:hover {
+        opacity: 1;
+        text-decoration: underline;
       }
       
       /* ナビゲーション */
       nav {
         background: white;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        position: sticky;
-        top: 0;
-        z-index: 100;
       }
       
       .nav-content {
@@ -119,27 +111,10 @@ const posts = (await getCollection('blog')).sort(
         padding: 3rem 2rem;
       }
       
-      /* セクションヘッダー */
-      .section-header {
-        margin-bottom: 2.5rem;
-      }
-
-      /* セクションヘッダー */
-.section-header {
-  margin-bottom: 2.5rem;
-  text-align: center;  /* ← ここに追加 */
-}
-      
-      .section-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #1a1a1a;
-        margin-bottom: 0.5rem;
-      }
-      
-      .section-subtitle {
+      .post-count {
         color: #6b7280;
-        font-size: 1rem;
+        margin-bottom: 2rem;
+        text-align: center;
       }
       
       /* 記事グリッド */
@@ -172,12 +147,10 @@ const posts = (await getCollection('blog')).sort(
         display: block;
       }
       
-      /* 記事コンテンツ */
       .post-content {
         padding: 2rem;
       }
       
-      /* カテゴリー */
       .post-category {
         display: inline-block;
         background: #eff6ff;
@@ -191,7 +164,6 @@ const posts = (await getCollection('blog')).sort(
         margin-bottom: 1rem;
       }
       
-      /* 日付 */
       .post-date {
         display: inline-block;
         font-size: 0.875rem;
@@ -200,7 +172,6 @@ const posts = (await getCollection('blog')).sort(
         margin-bottom: 1rem;
       }
       
-      /* タイトル */
       .post-card h2 {
         font-size: 1.5rem;
         margin-bottom: 0.75rem;
@@ -209,19 +180,13 @@ const posts = (await getCollection('blog')).sort(
         font-weight: 700;
       }
       
-      /* 説明文 */
       .post-description {
         color: #4b5563;
         font-size: 0.95rem;
         line-height: 1.7;
         margin-top: 0.75rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
       }
       
-      /* 続きを読むリンク */
       .read-more {
         display: inline-flex;
         align-items: center;
@@ -245,32 +210,10 @@ const posts = (await getCollection('blog')).sort(
         color: #3b82f6;
       }
       
-      /* フッター */
-      footer {
-        background: #1f2937;
-        color: #9ca3af;
-        padding: 3rem 2rem;
-        margin-top: 5rem;
-      }
-      
-      .footer-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        text-align: center;
-      }
-      
-      .footer-content p {
-        font-size: 0.875rem;
-      }
-      
       /* レスポンシブ */
       @media (max-width: 768px) {
-        .site-title {
+        h1 {
           font-size: 2rem;
-        }
-        
-        .site-description {
-          font-size: 1rem;
         }
         
         .posts-grid {
@@ -281,67 +224,26 @@ const posts = (await getCollection('blog')).sort(
         main {
           padding: 2rem 1rem;
         }
-        
-        .nav-content {
-          flex-wrap: wrap;
-        }
       }
-
-      /* カテゴリーの色分け */
-.post-category {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
-}
-
-/* カテゴリごとの色 */
-.post-category[data-category="Tech"] {
-  background: #eff6ff;
-  color: #1e40af;
-}
-
-.post-category[data-category="Business"] {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.post-category[data-category="Tutorial"] {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.post-category[data-category="News"] {
-  background: #fee2e2;
-  color: #991b1b;
-}
     </style>
   </head>
   <body>
     <header>
-      <div class="header-content">
-        <h1 class="site-title">IT活用のススメ</h1>
-        <p class="site-description">思考と仕事をITで時短していく</p>
-      </div>
+      <h1>{category}</h1>
+      <p class="breadcrumb">
+        <a href="/">ホーム</a> / {category}
+      </p>
     </header>
-
+    
     <nav>
-  <div class="nav-content">
-    <a href="/" class="nav-link">ホーム</a>
-    <a href="/category/tech" class="nav-link">Tech</a>
-    <a href="/category/Web" class="nav-link">Web</a>
-  </div>
-</nav>
+      <div class="nav-content">
+        <a href="/" class="nav-link">ホーム</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </nav>
     
     <main>
-      <div class="section-header">
-        <h2 class="section-title">最新記事</h2>
-        <p class="section-subtitle">テクノロジーとビジネスの最新情報をお届けします</p>
-      </div>
+      <p class="post-count">{posts.length}件の記事</p>
       
       <ul class="posts-grid">
         {posts.map((post) => (
@@ -361,11 +263,5 @@ const posts = (await getCollection('blog')).sort(
         ))}
       </ul>
     </main>
-    
-    <footer>
-      <div class="footer-content">
-        <p>&copy; 2026 IT活用のススメ. All rights reserved.</p>
-      </div>
-    </footer>
   </body>
 </html>
