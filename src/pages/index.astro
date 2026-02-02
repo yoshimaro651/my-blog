@@ -14,6 +14,11 @@ const posts = (await getCollection('blog')).sort(
     <meta name="viewport" content="width=device-width" />
     <title>IT活用のススメ - 思考と仕事をITで時短していく</title>
     <meta name="description" content="最新のIT技術、IT時事問題、ITの活用方法を紹介" />
+    
+    <!-- ファビコン -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    
     <style>
       * {
         margin: 0;
@@ -153,31 +158,12 @@ const posts = (await getCollection('blog')).sort(
         display: block;
       }
       
-      /* サムネイル（オプション） */
-      .post-thumbnail {
-        width: 100%;
-        height: 220px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .post-thumbnail::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 50%;
-        background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
-      }
-      
       /* 記事コンテンツ */
       .post-content {
         padding: 2rem;
       }
       
-      /* カテゴリー（オプション） */
+      /* カテゴリー */
       .post-category {
         display: inline-block;
         background: #eff6ff;
@@ -296,6 +282,13 @@ const posts = (await getCollection('blog')).sort(
       </div>
     </header>
     
+    <nav>
+      <div class="nav-content">
+        <a href="/" class="nav-link">ホーム</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </nav>
+    
     <main>
       <div class="section-header">
         <h2 class="section-title">最新記事</h2>
@@ -306,7 +299,6 @@ const posts = (await getCollection('blog')).sort(
         {posts.map((post) => (
           <li class="post-card">
             <a href={`/blog/${post.id.replace('.md', '')}/`}>
-              <div class="post-thumbnail"></div>
               <div class="post-content">
                 <span class="post-category">Tech</span>
                 <div class="post-date">
@@ -324,7 +316,7 @@ const posts = (await getCollection('blog')).sort(
     
     <footer>
       <div class="footer-content">
-        <p>&copy; IT活用のススメ. All rights reserved.</p>
+        <p>&copy; 2026 IT活用のススメ. All rights reserved.</p>
       </div>
     </footer>
   </body>
