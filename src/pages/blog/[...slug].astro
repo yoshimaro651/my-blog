@@ -3,250 +3,496 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id.replace('.md', '') },
-		props: { entry: post },
-	}));
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace('.md', '') },
+    props: { entry: post },
+  }));
 }
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter(p => p.id !== entry.id)
+  .slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="ja">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{entry.data.title}</title>
-		<style>
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
-	
-	body {
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-		line-height: 1.8;
-		color: #333;
-		background: #f5f5f5;
-	}
-	
-	main {
-		max-width: 800px;
-		margin: 2rem auto;
-		padding: 2rem;
-		background: white;
-		border-radius: 8px;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-	}
-	
-	h1 {
-		font-size: 2.5rem;
-		margin-bottom: 1rem;
-		color: #1a202c;
-		line-height: 1.3;
-		border-bottom: 3px solid #667eea;
-		padding-bottom: 0.5rem;
-	}
-	
-	/* 日付のスタイル */
-	.post-meta {
-		color: #666;
-		margin-bottom: 2rem;
-		padding-bottom: 1rem;
-		border-bottom: 1px solid #eee;
-		font-size: 0.95rem;
-	}
-	
-	article {
-		margin-top: 2rem;
-		font-size: 1.05rem;
-		line-height: 1.9;
-	}
-	
-	/* 見出し */
-	article :global(h2) {
-		margin-top: 3rem;
-		margin-bottom: 1.5rem;
-		font-size: 1.75rem;
-		color: #2d3748;
-		padding-left: 1rem;
-		border-left: 4px solid #667eea;
-	}
-	
-	article :global(h3) {
-		margin-top: 2rem;
-		margin-bottom: 1rem;
-		font-size: 1.4rem;
-		color: #4a5568;
-	}
-	
-	article :global(h4) {
-		margin-top: 1.5rem;
-		margin-bottom: 0.75rem;
-		font-size: 1.2rem;
-		color: #4a5568;
-	}
-	
-	/* 段落 */
-	article :global(p) {
-		margin-bottom: 1.5rem;
-		line-height: 1.9;
-	}
-	
-	/* リスト */
-	article :global(ul),
-	article :global(ol) {
-		margin-bottom: 1.5rem;
-		padding-left: 2rem;
-	}
-	
-	article :global(li) {
-		margin-bottom: 0.5rem;
-		line-height: 1.8;
-	}
-	
-	/* リンク */
-	article :global(a) {
-		color: #667eea;
-		text-decoration: none;
-		border-bottom: 1px solid #667eea;
-		transition: all 0.3s ease;
-	}
-	
-	article :global(a:hover) {
-		color: #764ba2;
-		border-bottom-color: #764ba2;
-	}
-	
-	/* コードブロック */
-	article :global(code) {
-		background: #f7fafc;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-		font-size: 0.9em;
-		color: #e53e3e;
-		border: 1px solid #e2e8f0;
-		font-family: 'Courier New', monospace;
-	}
-	
-	article :global(pre) {
-		background: #2d3748;
-		color: #e2e8f0;
-		padding: 1.5rem;
-		border-radius: 8px;
-		overflow-x: auto;
-		margin-bottom: 1.5rem;
-		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-	}
-	
-	article :global(pre code) {
-		background: transparent;
-		border: none;
-		color: inherit;
-		padding: 0;
-	}
-	
-	/* 引用 */
-	article :global(blockquote) {
-		border-left: 4px solid #667eea;
-		padding-left: 1.5rem;
-		margin: 2rem 0;
-		font-style: italic;
-		color: #4a5568;
-		background: #f7fafc;
-		padding: 1rem 1.5rem;
-		border-radius: 4px;
-	}
-	
-	/* 画像 */
-	article :global(img) {
-		max-width: 100%;
-		height: auto;
-		border-radius: 8px;
-		margin: 2rem 0;
-		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-	}
-	
-	/* 水平線 */
-	article :global(hr) {
-		border: none;
-		border-top: 2px solid #e2e8f0;
-		margin: 3rem 0;
-	}
-	
-	/* テーブル */
-	article :global(table) {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 2rem 0;
-	}
-	
-	article :global(th),
-	article :global(td) {
-		padding: 0.75rem;
-		border: 1px solid #e2e8f0;
-		text-align: left;
-	}
-	
-	article :global(th) {
-		background: #f7fafc;
-		font-weight: 600;
-	}
-	
-	/* 戻るリンク */
-	.back-link {
-		margin-top: 3rem;
-		display: inline-block;
-		color: #667eea;
-		text-decoration: none;
-		font-weight: 600;
-		padding: 0.75rem 1.5rem;
-		border: 2px solid #667eea;
-		border-radius: 6px;
-		transition: all 0.3s ease;
-	}
-	
-	.back-link:hover {
-		background: #667eea;
-		color: white;
-		transform: translateX(-4px);
-	}
-	
-	/* レスポンシブ */
-	@media (max-width: 768px) {
-		h1 {
-			font-size: 2rem;
-		}
-		
-		main {
-			padding: 1.5rem;
-			margin: 1rem;
-		}
-		
-		article {
-			font-size: 1rem;
-		}
-		
-		article :global(h2) {
-			font-size: 1.5rem;
-		}
-	}
-</style>
-	</head>
-	<body>
-		<main>
-			<h1>{entry.data.title}</h1>
-			<p class="post-meta">
-	<FormattedDate date={entry.data.pubDate} />
-</p>
-			<article>
-				<Content />
-			</article>
-			<a href="/" class="back-link">← 記事一覧に戻る</a>
-		</main>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{entry.data.title} | IT活用のススメ</title>
+    <meta name="description" content={entry.data.description} />
+    
+    <!-- SEO強化 -->
+    <meta property="og:title" content={entry.data.title} />
+    <meta property="og:description" content={entry.data.description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={`https://itkatsyo.com/blog/${entry.id.replace('.md', '')}/`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <link rel="canonical" href={`https://itkatsyo.com/blog/${entry.id.replace('.md', '')}/`} />
+    
+    <style>
+      :root {
+        --bg-primary: #f8fafc;
+        --bg-surface: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --text-muted: #94a3b8;
+        --border: #e2e8f0;
+        --primary: #1e40af;
+        --primary-light: #3b82f6;
+        --primary-hover: #1d4ed8;
+        --success: #059669;
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 35px 60px -12px rgb(0 0 0 / 0.15);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+        line-height: 1.75;
+        color: var(--text-primary);
+        background: var(--bg-primary);
+        font-weight: 400;
+      }
+
+      /* ヘッダー（トップページと統一） */
+      header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white;
+        padding: 5rem 2rem 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="white" opacity="0.08"/></svg>');
+        opacity: 0.3;
+      }
+      
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+      }
+
+      /* ナビゲーション（統一） */
+      nav {
+        background: var(--bg-surface);
+        box-shadow: var(--shadow-md);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+      }
+      
+      .nav-content {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+      }
+      
+      .nav-link {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .nav-link:hover {
+        background: linear-gradient(135deg, var(--primary-light), var(--primary-hover));
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      /* 記事コンテナ */
+      .article-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
+      }
+
+      /* 記事ヘッダー */
+      .article-header {
+        text-align: center;
+        margin-bottom: 4rem;
+        padding-bottom: 3rem;
+        border-bottom: 2px solid var(--border);
+      }
+      
+      .article-title {
+        font-size: clamp(2.25rem, 5vw, 3.5rem);
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .article-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        color: var(--text-secondary);
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+      
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .meta-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        opacity: 0.7;
+      }
+
+      /* 本文エリア */
+      .article-content {
+        background: var(--bg-surface);
+        border-radius: 24px;
+        padding: 4rem;
+        box-shadow: var(--shadow-lg);
+        margin-bottom: 4rem;
+        border: 1px solid var(--border);
+      }
+      
+      /* 見出し */
+      .article-content :global(h2) {
+        font-size: 2rem;
+        margin: 3.5rem 0 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        padding-left: 1.25rem;
+        border-left: 4px solid var(--primary-light);
+        position: relative;
+      }
+      
+      .article-content :global(h3) {
+        font-size: 1.5rem;
+        margin: 2.5rem 0 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
+      .article-content :global(h4) {
+        font-size: 1.25rem;
+        margin: 2rem 0 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
+      /* 段落・テキスト */
+      .article-content :global(p) {
+        margin-bottom: 1.75rem;
+        font-size: 1.1rem;
+        line-height: 1.85;
+      }
+      
+      /* リスト */
+      .article-content :global(ul),
+      .article-content :global(ol) {
+        margin: 1.5rem 0;
+        padding-left: 2rem;
+      }
+      
+      .article-content :global(li) {
+        margin-bottom: 0.75rem;
+        line-height: 1.75;
+      }
+      
+      /* リンク */
+      .article-content :global(a) {
+        color: var(--primary-light);
+        text-decoration: none;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+      
+      .article-content :global(a:hover) {
+        color: var(--primary-hover);
+        border-bottom-color: var(--primary-light);
+        text-shadow: 0 0 8px rgba(59,130,246,0.3);
+      }
+      
+      /* コード・プレ */
+      .article-content :global(code) {
+        background: #f1f5f9;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.9em;
+        color: var(--primary);
+        border: 1px solid var(--border);
+        font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      }
+      
+      .article-content :global(pre) {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: #e2e8f0;
+        padding: 2rem;
+        border-radius: 16px;
+        overflow-x: auto;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid #475569;
+      }
+      
+      /* 画像 */
+      .article-content :global(img) {
+        max-width: 100%;
+        height: auto;
+        border-radius: 16px;
+        margin: 2.5rem auto;
+        display: block;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border);
+      }
+      
+      /* 引用 */
+      .article-content :global(blockquote) {
+        border-left: 5px solid var(--primary-light);
+        padding: 1.75rem 2rem;
+        margin: 3rem 0;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border-radius: 12px;
+        font-style: italic;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-md);
+      }
+      
+      /* テーブル */
+      .article-content :global(table) {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2.5rem 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        background: var(--bg-surface);
+      }
+      
+      .article-content :global(th),
+      .article-content :global(td) {
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+        text-align: left;
+      }
+      
+      .article-content :global(th) {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
+      /* 戻る・関連記事ボタン */
+      .article-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 4rem 0 2rem;
+      }
+      
+      .action-button {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+      }
+      
+      .back-button {
+        background: var(--bg-surface);
+        color: var(--primary-light);
+        border: 2px solid var(--primary-light);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .back-button:hover {
+        background: var(--primary-light);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-xl);
+      }
+      
+      /* 関連記事 */
+      .related-section {
+        background: var(--bg-surface);
+        border-radius: 24px;
+        padding: 3rem;
+        margin: 4rem 0;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+      }
+      
+      .related-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: var(--text-primary);
+      }
+      
+      .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      .related-card {
+        padding: 1.5rem;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        transition: all 0.3s ease;
+      }
+      
+      .related-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        background: var(--bg-surface);
+      }
+      
+      .related-card h3 {
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+      
+      .related-meta {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+      }
+      
+      /* レスポンシブ */
+      @media (max-width: 768px) {
+        .article-container {
+          padding: 0 1rem;
+        }
+        
+        .article-content {
+          padding: 2rem 1.5rem;
+        }
+        
+        .article-actions {
+          flex-direction: column;
+        }
+        
+        .related-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1 class="site-title">IT活用のススメ</h1>
+        <p class="site-description">思考と仕事をITで時短していく</p>
+      </div>
+    </header>
+
+    <nav>
+      <div class="nav-content">
+        <a href="/" class="nav-link">🏠 ホーム</a>
+        <a href="/category/tech" class="nav-link">💻 Tech</a>
+        <a href="/category/web" class="nav-link">🌐 Web</a>
+        <a href="/sitemap" class="nav-link">🗺️ サイトマップ</a>
+      </div>
+    </nav>
+
+    <div class="article-container">
+      <!-- 記事ヘッダー -->
+      <div class="article-header">
+        <h1 class="article-title">{entry.data.title}</h1>
+        <div class="article-meta">
+          <div class="meta-item">
+            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+            </svg>
+            <FormattedDate date={entry.data.pubDate} />
+          </div>
+          <div class="meta-item">
+            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {entry.data.category}
+          </div>
+          <div class="meta-item">
+            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6.5-2.5a.75.75 0 011.5 0v3.5a.75.75 0 01-.468.69l2.12 1.23a.75.75 0 11-.894 1.2l-2.416-1.402A.75.75 0 017.5 12.75V9.5z" clip-rule="evenodd"></path>
+            </svg>
+            {Math.round(entry.data.description.length / 20)}分程度
+          </div>
+        </div>
+      </div>
+
+      <!-- 本文 -->
+      <article class="article-content">
+        <Content />
+      </article>
+
+      <!-- アクション -->
+      <div class="article-actions">
+        <a href="/" class="action-button back-button">
+          ← 記事一覧に戻る
+        </a>
+      </div>
+
+      <!-- 関連記事 -->
+      {relatedPosts.length > 0 && (
+        <div class="related-section">
+          <h2 class="related-title">関連記事</h2>
+          <div class="related-grid">
+            {relatedPosts.map((post) => (
+              <a href={`/blog/${post.slug}/`} class="related-card">
+                <h3>{post.data.title}</h3>
+                <div class="related-meta">
+                  <FormattedDate date={post.data.pubDate} /> • {post.data.category}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </body>
 </html>
