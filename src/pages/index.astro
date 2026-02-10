@@ -11,7 +11,7 @@ const posts = (await getCollection('blog')).sort(
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IT活用のススメ - 思考と仕事をITで時短していく</title>
     <meta name="description" content="最新のIT技術、IT時事問題、ITの活用方法を紹介" />
     
@@ -50,13 +50,14 @@ const posts = (await getCollection('blog')).sort(
         color: var(--text-primary);
         background: var(--bg-primary);
         font-weight: 400;
+        overflow-x: hidden;
       }
       
       /* ヘッダー（SVG修正済み） */
       header {
         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
         color: white;
-        padding: 5rem 2rem 4rem;
+        padding: 4rem 1.5rem 3rem;
         position: relative;
         overflow: hidden;
       }
@@ -68,7 +69,7 @@ const posts = (await getCollection('blog')).sort(
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="white" opacity="0.08"/></svg>');
+        background: url("image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='white' opacity='0.08'/%3E%3C/svg%3E");
         opacity: 0.3;
         pointer-events: none;
       }
@@ -82,7 +83,7 @@ const posts = (await getCollection('blog')).sort(
       }
       
       .site-title {
-        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-size: clamp(1.75rem, 8vw, 3.5rem);
         font-weight: 800;
         margin-bottom: 0.75rem;
         letter-spacing: -0.025em;
@@ -93,14 +94,14 @@ const posts = (await getCollection('blog')).sort(
       }
       
       .site-description {
-        font-size: 1.3rem;
+        font-size: clamp(1rem, 4vw, 1.3rem);
         opacity: 0.95;
         font-weight: 300;
         max-width: 600px;
         margin: 0 auto;
       }
       
-      /* ナビゲーション（拡張） */
+      /* ナビゲーション（スマホハンバーガーメニュー） */
       nav {
         background: var(--bg-surface);
         box-shadow: var(--shadow-md);
@@ -111,23 +112,28 @@ const posts = (await getCollection('blog')).sort(
       }
       
       .nav-content {
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
         max-width: 1200px;
         margin: 0 auto;
-        padding: 1rem 2rem;
+        padding: 0.75rem 1.5rem;
+      }
+      
+      /* デスクトップナビ */
+      .desktop-nav {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
       }
       
       .nav-link {
         color: var(--text-primary);
         text-decoration: none;
         font-weight: 500;
-        padding: 0.75rem 1.5rem;
+        padding: 0.5rem 1rem;
         border-radius: 12px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         white-space: nowrap;
+        font-size: 0.95rem;
       }
       
       .nav-link:hover {
@@ -137,21 +143,32 @@ const posts = (await getCollection('blog')).sort(
         box-shadow: var(--shadow-lg);
       }
       
+      /* ハンバーガーメニューボタン */
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        color: var(--text-primary);
+      }
+      
       /* メインコンテンツ */
       main {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 4rem 2rem;
+        padding: 3rem 1.5rem;
       }
       
       /* セクションヘッダー */
       .section-header {
-        margin-bottom: 3.5rem;
+        margin-bottom: 3rem;
         text-align: center;
       }
       
       .section-title {
-        font-size: clamp(2rem, 4vw, 3rem);
+        font-size: clamp(1.75rem, 6vw, 3rem);
         font-weight: 800;
         color: var(--text-primary);
         margin-bottom: 1rem;
@@ -163,7 +180,7 @@ const posts = (await getCollection('blog')).sort(
       
       .section-subtitle {
         color: var(--text-secondary);
-        font-size: 1.125rem;
+        font-size: 1.1rem;
         max-width: 600px;
         margin: 0 auto;
       }
@@ -171,9 +188,10 @@ const posts = (await getCollection('blog')).sort(
       /* 記事グリッド */
       .posts-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-        gap: 2.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
         list-style: none;
+        padding: 0;
       }
       
       /* 記事カード（画像なし・白背景） */
@@ -190,7 +208,7 @@ const posts = (await getCollection('blog')).sort(
       }
       
       .post-card:hover {
-        transform: translateY(-16px) scale(1.02);
+        transform: translateY(-12px) scale(1.01);
         box-shadow: var(--shadow-xl);
         border-color: var(--primary-light);
       }
@@ -203,15 +221,15 @@ const posts = (await getCollection('blog')).sort(
         height: 100%;
       }
       
-      /* 記事コンテンツ（画像なしで上から開始） */
+      /* 記事コンテンツ */
       .post-content {
-        padding: 2.5rem;
+        padding: 2rem;
         flex: 1;
         display: flex;
         flex-direction: column;
       }
       
-      /* カテゴリーバッジ（グラデーション） */
+      /* カテゴリーバッジ */
       .post-category {
         display: inline-block;
         padding: 0.375rem 1rem;
@@ -220,7 +238,7 @@ const posts = (await getCollection('blog')).sort(
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
         box-shadow: 0 2px 4px rgba(0,0,0,0.08);
       }
       
@@ -250,7 +268,7 @@ const posts = (await getCollection('blog')).sort(
         font-size: 0.875rem;
         color: var(--text-muted);
         font-weight: 500;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
         padding: 0.25rem 0.75rem;
         background: var(--border);
         border-radius: 6px;
@@ -258,7 +276,7 @@ const posts = (await getCollection('blog')).sort(
       
       /* タイトル */
       .post-card h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         margin-bottom: 1rem;
         color: var(--text-primary);
         line-height: 1.35;
@@ -274,7 +292,7 @@ const posts = (await getCollection('blog')).sort(
       /* 説明文 */
       .post-description {
         color: var(--text-secondary);
-        font-size: 0.975rem;
+        font-size: 0.95rem;
         line-height: 1.7;
         margin-bottom: auto;
         flex-grow: 1;
@@ -284,14 +302,14 @@ const posts = (await getCollection('blog')).sort(
         overflow: hidden;
       }
       
-      /* 続きを読むリンク（強化） */
+      /* 続きを読むリンク */
       .read-more {
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
         color: var(--primary-light);
         font-weight: 600;
-        margin-top: 1.5rem;
+        margin-top: 1.25rem;
         font-size: 0.9rem;
         padding: 0.5rem 0;
         transition: all 0.3s ease;
@@ -312,12 +330,12 @@ const posts = (await getCollection('blog')).sort(
         transform: translateX(8px) scale(1.1);
       }
       
-      /* フッター（レスポンシブ改善） */
+      /* フッター */
       footer {
         background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
         color: #9ca3af;
-        padding: 4rem 2rem 3rem;
-        margin-top: 6rem;
+        padding: 3rem 1.5rem 2rem;
+        margin-top: 5rem;
       }
       
       .footer-content {
@@ -330,7 +348,7 @@ const posts = (await getCollection('blog')).sort(
         margin-bottom: 2rem;
         display: flex;
         justify-content: center;
-        gap: 1rem;
+        gap: 0.75rem;
         flex-wrap: wrap;
       }
       
@@ -338,7 +356,7 @@ const posts = (await getCollection('blog')).sort(
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        padding: 0.75rem 1.25rem;
         border-radius: 9999px;
         background: rgba(255,255,255,0.1);
         color: #e5e7eb;
@@ -348,6 +366,7 @@ const posts = (await getCollection('blog')).sort(
         border: 1px solid rgba(255,255,255,0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(10px);
+        white-space: nowrap;
       }
       
       .footer-button:hover {
@@ -362,33 +381,83 @@ const posts = (await getCollection('blog')).sort(
         opacity: 0.8;
       }
       
-      /* レスポンシブ */
+      /* スマホ最適化（768px以下） */
       @media (max-width: 768px) {
-        .site-title {
-          font-size: 2.25rem;
-        }
-        
-        .site-description {
-          font-size: 1.125rem;
-        }
-        
-        .posts-grid {
-          grid-template-columns: 1fr;
-          gap: 2rem;
+        header {
+          padding: 3rem 1rem 2.5rem;
         }
         
         main {
           padding: 2rem 1rem;
         }
         
-        .nav-content {
-          gap: 1rem;
-          padding: 0.75rem 1rem;
+        .site-title {
+          font-size: 2rem;
+        }
+        
+        .site-description {
+          font-size: 1.125rem;
+        }
+        
+        /* ハンバーガーメニュー表示 */
+        .desktop-nav {
+          display: none;
+        }
+        
+        .mobile-menu-btn {
+          display: block;
+        }
+        
+        .posts-grid {
+          grid-template-columns: 1fr;
+          gap: 1.75rem;
+        }
+        
+        .post-content {
+          padding: 1.75rem;
+        }
+        
+        .post-card h2 {
+          font-size: 1.3rem;
+        }
+        
+        .section-header {
+          margin-bottom: 2.5rem;
+        }
+        
+        .section-title {
+          font-size: 1.75rem;
         }
         
         .footer-links {
           flex-direction: column;
           gap: 0.75rem;
+          align-items: center;
+        }
+        
+        .footer-button {
+          justify-content: center;
+          min-width: 200px;
+        }
+      }
+      
+      /* 超小型スマホ（480px以下） */
+      @media (max-width: 480px) {
+        .nav-content,
+        header,
+        main,
+        footer {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        
+        .post-content {
+          padding: 1.5rem;
+        }
+        
+        .footer-button {
+          min-width: 180px;
+          padding: 0.625rem 1rem;
         }
       }
     </style>
@@ -403,10 +472,13 @@ const posts = (await getCollection('blog')).sort(
 
     <nav>
       <div class="nav-content">
-        <a href="/" class="nav-link">🏠 ホーム</a>
-        <a href="/category/tech" class="nav-link">💻 Tech</a>
-        <a href="/category/web" class="nav-link">🌐 Web</a>
-        <a href="/sitemap" class="nav-link">🗺️ サイトマップ</a>
+        <div class="desktop-nav">
+          <a href="/" class="nav-link">🏠 ホーム</a>
+          <a href="/category/tech" class="nav-link">💻 Tech</a>
+          <a href="/category/web" class="nav-link">🌐 Web</a>
+          <a href="/sitemap" class="nav-link">🗺️ サイトマップ</a>
+        </div>
+        <button class="mobile-menu-btn">☰</button>
       </div>
     </nav>
     
@@ -449,5 +521,25 @@ const posts = (await getCollection('blog')).sort(
         <p>&copy; 2026 IT活用のススメ. All rights reserved.</p>
       </div>
     </footer>
+
+    <script>
+      // スマホハンバーガーメニュー（簡易版）
+      const mobileBtn = document.querySelector('.mobile-menu-btn');
+      const desktopNav = document.querySelector('.desktop-nav');
+      
+      mobileBtn.addEventListener('click', () => {
+        desktopNav.style.display = desktopNav.style.display === 'flex' ? 'none' : 'flex';
+        desktopNav.style.flexDirection = 'column';
+        desktopNav.style.gap = '0.5rem';
+        desktopNav.style.background = 'var(--bg-surface)';
+        desktopNav.style.padding = '1rem';
+        desktopNav.style.position = 'absolute';
+        desktopNav.style.top = '100%';
+        desktopNav.style.left = '0';
+        desktopNav.style.right = '0';
+        desktopNav.style.boxShadow = 'var(--shadow-md)';
+        desktopNav.style.zIndex = '99';
+      });
+    </script>
   </body>
 </html>
