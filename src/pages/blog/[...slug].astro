@@ -1,3 +1,4 @@
+
 ---
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -37,7 +38,6 @@ const relatedPosts = allPosts
     <link rel="canonical" href={`https://itkatsyo.com/blog/${entry.id.replace('.md', '')}/`} />
     
     <style>
-      /* 省略（前回と同じCSS変数・ヘッダー・ナビ） */
       :root {
         --bg-primary: #f8fafc;
         --bg-surface: #ffffff;
@@ -54,7 +54,11 @@ const relatedPosts = allPosts
         --shadow-xl: 0 35px 60px -12px rgb(0 0 0 / 0.15);
       }
 
-      * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
@@ -64,14 +68,13 @@ const relatedPosts = allPosts
         font-weight: 400;
       }
 
-      /* ヘッダー（下余白追加） */
+      /* ヘッダー（トップページと統一） */
       header {
         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
         color: white;
-        padding: 5rem 2rem 2rem; /* ↓ 下余白を減らしてナビとの間隔調整 */
+        padding: 5rem 2rem 3rem;
         position: relative;
         overflow: hidden;
-        margin-bottom: 2rem; /* ↓ ヘッダー下に余白追加 */
       }
       
       header::before {
@@ -81,7 +84,7 @@ const relatedPosts = allPosts
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="white" opacity="0.08"/></svg>');
+        background: url('image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="white" opacity="0.08"/></svg>');
         opacity: 0.3;
       }
       
@@ -93,7 +96,7 @@ const relatedPosts = allPosts
         text-align: center;
       }
 
-      /* ナビゲーション */
+      /* ナビゲーション（統一） */
       nav {
         background: var(--bg-surface);
         box-shadow: var(--shadow-md);
@@ -101,7 +104,6 @@ const relatedPosts = allPosts
         top: 0;
         z-index: 100;
         backdrop-filter: blur(10px);
-        margin-bottom: 3rem; /* ↓ ナビ下に余白追加 */
       }
       
       .nav-content {
@@ -148,10 +150,10 @@ const relatedPosts = allPosts
       }
       
       .article-title {
-        font-size: clamp(2.25rem, 5vw, 3.75rem);
+        font-size: clamp(2.25rem, 5vw, 3.5rem);
         font-weight: 800;
         line-height: 1.2;
-        margin-bottom: 2rem; /* ↓ タイトル下余白増加 */
+        margin-bottom: 1.5rem;
         background: linear-gradient(135deg, var(--primary), var(--primary-light));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -162,106 +164,269 @@ const relatedPosts = allPosts
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 2.5rem; /* ↓ アイコン間隔拡大 */
+        gap: 2rem;
         flex-wrap: wrap;
         color: var(--text-secondary);
-        font-size: 1.05rem;
-        margin-bottom: 1rem;
+        font-size: 1rem;
+        margin-bottom: 2rem;
       }
       
       .meta-item {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1.25rem;
-        background: rgba(255,255,255,0.6);
-        border-radius: 12px;
-        backdrop-filter: blur(10px);
+        gap: 0.5rem;
       }
       
       .meta-icon {
-        width: 1.375rem;
-        height: 1.375rem;
-        opacity: 0.8;
+        width: 1.25rem;
+        height: 1.25rem;
+        opacity: 0.7;
       }
 
       /* 本文エリア */
       .article-content {
         background: var(--bg-surface);
-        border-radius: 0 0 24px 24px; /* ↑ ヘッダーと一体化 */
+        border-radius: 24px;
         padding: 4rem;
-        box-shadow: var(--shadow-xl);
-        margin-bottom: 5rem; /* ↓ 下余白増加 */
+        box-shadow: var(--shadow-lg);
+        margin-bottom: 4rem;
         border: 1px solid var(--border);
-        border-top: none;
       }
       
-      /* 以下、既存スタイル（見出し・本文など）は省略 */
+      /* 見出し */
       .article-content :global(h2) {
         font-size: 2rem;
-        margin: 4rem 0 2rem;
+        margin: 3.5rem 0 1.75rem;
         font-weight: 700;
         color: var(--text-primary);
-        padding-left: 1.5rem;
-        border-left: 5px solid var(--primary-light);
+        padding-left: 1.25rem;
+        border-left: 4px solid var(--primary-light);
+        position: relative;
       }
       
-      /* アクション */
+      .article-content :global(h3) {
+        font-size: 1.5rem;
+        margin: 2.5rem 0 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
+      .article-content :global(h4) {
+        font-size: 1.25rem;
+        margin: 2rem 0 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
+      /* 段落・テキスト */
+      .article-content :global(p) {
+        margin-bottom: 1.75rem;
+        font-size: 1.1rem;
+        line-height: 1.85;
+      }
+      
+      /* リスト */
+      .article-content :global(ul),
+      .article-content :global(ol) {
+        margin: 1.5rem 0;
+        padding-left: 2rem;
+      }
+      
+      .article-content :global(li) {
+        margin-bottom: 0.75rem;
+        line-height: 1.75;
+      }
+      
+      /* リンク */
+      .article-content :global(a) {
+        color: var(--primary-light);
+        text-decoration: none;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+      
+      .article-content :global(a:hover) {
+        color: var(--primary-hover);
+        border-bottom-color: var(--primary-light);
+        text-shadow: 0 0 8px rgba(59,130,246,0.3);
+      }
+      
+      /* コード・プレ */
+      .article-content :global(code) {
+        background: #f1f5f9;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.9em;
+        color: var(--primary);
+        border: 1px solid var(--border);
+        font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      }
+      
+      .article-content :global(pre) {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: #e2e8f0;
+        padding: 2rem;
+        border-radius: 16px;
+        overflow-x: auto;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid #475569;
+      }
+      
+      /* 画像 */
+      .article-content :global(img) {
+        max-width: 100%;
+        height: auto;
+        border-radius: 16px;
+        margin: 2.5rem auto;
+        display: block;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border);
+      }
+      
+      /* 引用 */
+      .article-content :global(blockquote) {
+        border-left: 5px solid var(--primary-light);
+        padding: 1.75rem 2rem;
+        margin: 3rem 0;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border-radius: 12px;
+        font-style: italic;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-md);
+      }
+      
+      /* テーブル */
+      .article-content :global(table) {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2.5rem 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        background: var(--bg-surface);
+      }
+      
+      .article-content :global(th),
+      .article-content :global(td) {
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+        text-align: left;
+      }
+      
+      .article-content :global(th) {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
+      /* 戻る・関連記事ボタン */
       .article-actions {
         display: flex;
-        gap: 1.5rem;
+        gap: 1rem;
         justify-content: center;
         flex-wrap: wrap;
-        margin: 5rem 0 3rem;
+        margin: 4rem 0 2rem;
       }
       
       .action-button {
-        padding: 1.125rem 2.25rem;
-        border-radius: 16px;
+        padding: 1rem 2rem;
+        border-radius: 12px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
-        font-size: 1.05rem;
-        box-shadow: var(--shadow-lg);
+        font-size: 1rem;
       }
       
       .back-button {
         background: var(--bg-surface);
         color: var(--primary-light);
         border: 2px solid var(--primary-light);
+        box-shadow: var(--shadow-md);
       }
       
       .back-button:hover {
         background: var(--primary-light);
         color: white;
-        transform: translateY(-4px);
+        transform: translateY(-3px);
         box-shadow: var(--shadow-xl);
       }
-
+      
+      /* 関連記事 */
+      .related-section {
+        background: var(--bg-surface);
+        border-radius: 24px;
+        padding: 3rem;
+        margin: 4rem 0;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+      }
+      
+      .related-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: var(--text-primary);
+      }
+      
+      .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      .related-card {
+        padding: 1.5rem;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        transition: all 0.3s ease;
+      }
+      
+      .related-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        background: var(--bg-surface);
+      }
+      
+      .related-card h3 {
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+      
+      .related-meta {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+      }
+      
       /* レスポンシブ */
       @media (max-width: 768px) {
-        .article-header {
-          padding: 3rem 1rem 2.5rem;
-          margin-top: 1.5rem;
-        }
-        
-        .article-meta {
-          gap: 1.5rem;
-          flex-direction: column;
+        .article-container {
+          padding: 0 1rem;
         }
         
         .article-content {
-          padding: 2.5rem 1.75rem;
-          margin-bottom: 3rem;
+          padding: 2rem 1.5rem;
+        }
+        
+        .article-actions {
+          flex-direction: column;
+        }
+        
+        .related-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
   </head>
   <body>
-    <!-- ヘッダー・ナビ（前回と同じ） -->
     <header>
       <div class="header-content">
         <h1 class="site-title">IT活用のススメ</h1>
@@ -285,4 +450,53 @@ const relatedPosts = allPosts
         <div class="article-meta">
           <div class="meta-item">
             <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+            </svg>
+            <FormattedDate date={entry.data.pubDate} />
+          </div>
+          <div class="meta-item">
+            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {entry.data.category}
+          </div>
+          <div class="meta-item">
+            <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6.5-2.5a.75.75 0 011.5 0v3.5a.75.75 0 01-.468.69l2.12 1.23a.75.75 0 11-.894 1.2l-2.416-1.402A.75.75 0 017.5 12.75V9.5z" clip-rule="evenodd"></path>
+            </svg>
+            {Math.round(entry.data.description.length / 20)}分程度
+          </div>
+        </div>
+      </div>
+
+      <!-- 本文 -->
+      <article class="article-content">
+        <Content />
+      </article>
+
+      <!-- アクション -->
+      <div class="article-actions">
+        <a href="/" class="action-button back-button">
+          ← 記事一覧に戻る
+        </a>
+      </div>
+
+      <!-- 関連記事 -->
+      {relatedPosts.length > 0 && (
+        <div class="related-section">
+          <h2 class="related-title">関連記事</h2>
+          <div class="related-grid">
+            {relatedPosts.map((post) => (
+              <a href={`/blog/${post.slug}/`} class="related-card">
+                <h3>{post.data.title}</h3>
+                <div class="related-meta">
+                  <FormattedDate date={post.data.pubDate} /> • {post.data.category}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </body>
+</html>
