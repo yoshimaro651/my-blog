@@ -176,7 +176,7 @@ const posts = (await getCollection('blog')).sort(
         list-style: none;
       }
       
-      /* 記事カード（大幅強化） */
+      /* 記事カード（画像なし・白背景） */
       .post-card {
         background: var(--bg-surface);
         border-radius: 24px;
@@ -203,30 +203,9 @@ const posts = (await getCollection('blog')).sort(
         height: 100%;
       }
       
-      /* サムネイル画像エリア */
-      .post-image {
-        height: 220px;
-        background: linear-gradient(135deg, var(--primary-light), var(--primary-hover));
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .post-image::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(45deg, rgba(30,64,175,0.8), rgba(59,130,246,0.6));
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      
-      .post-card:hover .post-image::before {
-        opacity: 1;
-      }
-      
-      /* 記事コンテンツ */
+      /* 記事コンテンツ（画像なしで上から開始） */
       .post-content {
-        padding: 2rem;
+        padding: 2.5rem;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -300,7 +279,7 @@ const posts = (await getCollection('blog')).sort(
         margin-bottom: auto;
         flex-grow: 1;
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -412,18 +391,6 @@ const posts = (await getCollection('blog')).sort(
           gap: 0.75rem;
         }
       }
-      
-      /* ダークモード対応（ボーナス） */
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg-primary: #0f0f23;
-          --bg-surface: #1a1a2e;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --text-muted: #94a3b8;
-          --border: #334155;
-        }
-      }
     </style>
   </head>
   <body>
@@ -453,14 +420,6 @@ const posts = (await getCollection('blog')).sort(
         {posts.map((post) => (
           <li class="post-card">
             <a href={`/blog/${post.slug}/`}>
-              <div class="post-image">
-                {/* ブログ記事に image: '/path/to/image.jpg' を追加すると自動表示 */}
-                {post.data.image ? (
-                  <img src={post.data.image} alt={post.data.title} style="width:100%;height:100%;object-fit:cover;" />
-                ) : (
-                  <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--primary-light),var(--primary));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.8);font-size:3rem;">📱</div>
-                )}
-              </div>
               <div class="post-content">
                 <span class="post-category" data-category={post.data.category}>
                   {post.data.category}
