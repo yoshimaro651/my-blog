@@ -1,0 +1,158 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const posts = await getCollection('blog');
+---
+
+<BaseLayout
+  title="サイトマップ"
+  description="IT活用のススメの全ページ・記事一覧です。"
+>
+  <main>
+    <h1>サイトマップ</h1>
+
+    <article>
+      <h2>主要ページ</h2>
+      <ul class="page-list">
+        <li><a href="/">トップページ（最新記事一覧）</a></li>
+        <li><a href="/about/">運営者情報</a></li>
+        <li><a href="/privacy/">プライバシーポリシー</a></li>
+        <li><a href="/contact/">お問い合わせ</a></li>
+        <li><a href="/category/tech">Techカテゴリ</a></li>
+        <li><a href="/category/web">Webカテゴリ</a></li>
+      </ul>
+
+      <h2>ブログ記事一覧（新着順）</h2>
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.slug}/`}>
+              {post.data.title}
+              <span class="post-meta">
+                ({new Date(post.data.pubDate).toLocaleDateString('ja-JP')})
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h2>最終更新日</h2>
+      <p>
+        このサイトマップは {new Date(posts[0]?.data.pubDate || new Date()).toLocaleDateString('ja-JP')} に更新されました。
+      </p>
+    </article>
+
+    <!-- ホームに戻るボタン -->
+    <a href="/" class="back-link">← ホームに戻る</a>
+  </main>
+</BaseLayout>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #1a202c;
+  line-height: 1.3;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+article {
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+article h2 {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: #2d3748;
+  padding-left: 1rem;
+  border-left: 4px solid #667eea;
+}
+
+/* リストスタイル */
+.page-list,
+.post-list {
+  margin-bottom: 2rem;
+  padding-left: 2rem;
+}
+
+.page-list li,
+.post-list li {
+  margin-bottom: 0.75rem;
+}
+
+.page-list a,
+.post-list a {
+  color: #2d3748;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.page-list a:hover,
+.post-list a:hover {
+  color: #667eea;
+}
+
+.post-meta {
+  color: #718096;
+  font-size: 0.9em;
+  margin-left: 0.5rem;
+}
+
+/* 戻るボタン */
+.back-link {
+  margin-top: 3rem;
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  background: #667eea;
+  color: white;
+  transform: translateX(-4px);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  main {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  article {
+    font-size: 1rem;
+  }
+
+  article h2 {
+    font-size: 1.5rem;
+  }
+}
+</style>
