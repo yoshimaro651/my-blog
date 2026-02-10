@@ -295,6 +295,41 @@ const posts = (await getCollection('blog')).sort(
           flex-wrap: wrap;
         }
       }
+
+            .footer-links {
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .footer-button {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: 9999px;
+        background: #111827;
+        color: #e5e7eb;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border: 1px solid #4b5563;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+      }
+
+      .footer-button:hover {
+        background: #e5e7eb;
+        color: #111827;
+        transform: translateY(-1px);
+      }
+
+      @media (max-width: 768px) {
+        .footer-links {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
     </style>
   </head>
   <body>
@@ -342,8 +377,13 @@ const posts = (await getCollection('blog')).sort(
     
     <footer>
       <div class="footer-content">
+        <div class="footer-links">
+          <a href="https://itkatsyo.com/" class="footer-button">ホーム</a>
+          <a href="https://itkatsyo.com/about/" class="footer-button">運用者情報</a>
+        </div>
         <p>&copy; 2026 IT活用のススメ. All rights reserved.</p>
       </div>
     </footer>
+
   </body>
 </html>
